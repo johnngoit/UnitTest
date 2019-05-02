@@ -1,0 +1,10 @@
+﻿
+        [TestMethod]
+        [PexGeneratedBy(typeof(@ClassNameTest))]
+        public void @MethodNameConfirm()
+        {
+			@TargetDeclareInit
+			@MethodParamsDeclareInit
+			@MethodReturnResultthis.@MethodName(@TargetParamsCall@MethodParamsCall);
+            Assert.AreEqual((string)testStorage[""], "", "@ClassNameTest @MethodName is not work property");
+        }

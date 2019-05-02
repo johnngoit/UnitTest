@@ -1,0 +1,243 @@
+<Compile Include="UnitTests\Common\RSSGeneratorTest.cs" />
+<Compile Include="UnitTests\Common\RSSGeneratorTest.AddItem.g.cs">
+	<DependentUpon>UnitTests\Common\RSSGeneratorTest.cs</DependentUpon>
+</Compile>
+<Compile Include="UnitTests\Common\RSSGeneratorTest.Rfc822Date.g.cs">
+	<DependentUpon>UnitTests\Common\RSSGeneratorTest.cs</DependentUpon>
+</Compile>
+<Compile Include="UnitTests\Common\RSSGeneratorTest.GetXml.g.cs">
+	<DependentUpon>UnitTests\Common\RSSGeneratorTest.cs</DependentUpon>
+</Compile>
+<Compile Include="UnitTests\Common\RSSGeneratorTest.GetFeed.g.cs">
+	<DependentUpon>UnitTests\Common\RSSGeneratorTest.cs</DependentUpon>
+</Compile>
+
+
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework;
+using Microsoft.Pex.Framework.Validation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+
+namespace  SharedLibrary.Common.Tests
+{
+    [TestClass]
+    [PexClass(typeof(RSSGeneratorTest))]
+    [PexAllowedExceptionFromTypeUnderTest(typeof(ArgumentException), AcceptExceptionSubtypes = true)]
+    [PexAllowedExceptionFromTypeUnderTest(typeof(InvalidOperationException))]
+    public partial class RSSGeneratorTest
+    {
+        protected static IDisposable Context { get; set; }
+        protected static IDictionary<string, object> testStorage = new Dictionary<string, object>()
+        { };
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        { }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+
+        }
+
+        [TestInitialize()]
+        public void PreTest()
+        {
+            // Create ShimsContext
+            Context = ShimsContext.Create();
+            //TestLibrary.DNNFakes.Initialize();
+            //TestLibrary.SystemFakes.Initialize();
+            //TestLibrary.SharedLibraryFakes.Initialize();
+
+            CommonFakes.Initialize();
+        }
+
+        [TestCleanup()]
+        public void PostTest()
+        {
+            Context.Dispose();
+            Context = null;
+        }
+
+ //       [PexMethod]
+ //       public @MethodReturnType @MethodName(@TargetDeclare@MethodParamDeclare)
+ //       {
+ //           @IsReturn@CallInstance.@MethodName(@MethodParamsCall);
+ //       }
+    }
+} //       [PexMethod]
+ //       public RSSGeneratorItem AddItem(RSSGenerator target,string title,string description,string author,string link,DateTime pubDate,string guid,List<string> categories = null )
+ //       {
+ //           return target.AddItem(title, description, author, link, pubDate, guid, categories);
+ //       }
+ //       [PexMethod]
+ //       public RSSGeneratorItem AddItem(RSSGenerator target,RSSGeneratorItem item )
+ //       {
+ //           return target.AddItem(item);
+ //       }
+ //       [PexMethod]
+ //       public string Rfc822Date(RSSGenerator target,DateTime date )
+ //       {
+ //           return target.Rfc822Date(date);
+ //       }
+ //       [PexMethod]
+ //       public string GetXml(RSSGenerator target, )
+ //       {
+ //           return target.GetXml();
+ //       }
+ //       [PexMethod]
+ //       public string GetFeed(RSSGenerator target, )
+ //       {
+ //           return target.GetFeed();
+ //       }
+
+//------------------------
+//FileName:C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.AddItem.g.cs
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace  SharedLibrary.Common.Tests
+{
+    public partial class RSSGeneratorTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(RSSGeneratorTest))]
+        public void AddItemConfirm()
+        {
+            string title = null;
+	string description = null;
+	string author = null;
+	string link = null;
+	DateTime pubDate = null;
+	string guid = null;
+	List<string> categories = null 
+            	var result = this.AddItem(title, description, author, link, pubDate, guid, categories);
+            Assert.AreEqual("", "", "RSSGeneratorTest AddItem is not work property");
+        }
+    }
+}
+//------------------------
+//FileName:C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.AddItem.g.cs
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace  SharedLibrary.Common.Tests
+{
+    public partial class RSSGeneratorTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(RSSGeneratorTest))]
+        public void AddItemConfirm()
+        {
+            RSSGeneratorItem item 
+            	var result = this.AddItem(item);
+            Assert.AreEqual("", "", "RSSGeneratorTest AddItem is not work property");
+        }
+    }
+}
+//------------------------
+//FileName:C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.Rfc822Date.g.cs
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace  SharedLibrary.Common.Tests
+{
+    public partial class RSSGeneratorTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(RSSGeneratorTest))]
+        public void Rfc822DateConfirm()
+        {
+            DateTime date 
+            	var result = this.Rfc822Date(date);
+            Assert.AreEqual("", "", "RSSGeneratorTest Rfc822Date is not work property");
+        }
+    }
+}
+//------------------------
+//FileName:C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.GetXml.g.cs
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace  SharedLibrary.Common.Tests
+{
+    public partial class RSSGeneratorTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(RSSGeneratorTest))]
+        public void GetXmlConfirm()
+        {
+             
+            	var result = this.GetXml();
+            Assert.AreEqual("", "", "RSSGeneratorTest GetXml is not work property");
+        }
+    }
+}
+//------------------------
+//FileName:C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.GetFeed.g.cs
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace  SharedLibrary.Common.Tests
+{
+    public partial class RSSGeneratorTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(RSSGeneratorTest))]
+        public void GetFeedConfirm()
+        {
+             
+            	var result = this.GetFeed();
+            Assert.AreEqual("", "", "RSSGeneratorTest GetFeed is not work property");
+        }
+    }
+}
+
+[Project, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\SharedLibrary.Test.csproj]
+\[@Class:RSSGenerator, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.cs]
+\[Method:AddItem, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.AddItem.g.cs]
+\[Method:Rfc822Date, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.Rfc822Date.g.cs]
+\[Method:GetXml, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.GetXml.g.cs]
+\[Method:GetFeed, C:\websites\dnndev.me\DesktopModules\SharedLibrary\SharedLibrary.Test\UnitTests\Common\RSSGeneratorTest.GetFeed.g.cs]
+
+generatedfiles
+System.Collections.Generic.List`1[System.IO.FileInfo]
+methodfile
+
+classfile
+
+projectfile
+
+

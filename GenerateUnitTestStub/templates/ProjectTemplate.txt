@@ -1,0 +1,9 @@
+﻿    <Compile Include="UnitTests\Components\Controllers\YouTubeControllerTest.cs" />
+    <Compile Include="UnitTests\Components\Controllers\YouTubeControllerTest.Constructor.g.cs">
+      <DependentUpon>YouTubeControllerTest.cs</DependentUpon>
+    </Compile>
+
+	<Compile Include="@ClassTestFile_UnitPath" />
+    <Compile Include="@MethodTestFile_UnitPath">
+      <DependentUpon>@ClassTestFile_UnitPath</DependentUpon>
+    </Compile>

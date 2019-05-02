@@ -1,0 +1,5 @@
+﻿		[PexMethod]
+		public @MethodReturnType @MethodName(@TargetDeclare@MethodParamDeclare)
+		{
+			@IsReturn@CallInstance.@MethodName(@MethodParamsCall);
+		}

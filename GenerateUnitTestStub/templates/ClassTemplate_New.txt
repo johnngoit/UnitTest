@@ -1,0 +1,50 @@
+﻿using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework;
+using Microsoft.Pex.Framework.Validation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+
+namespace @NameSpace.Tests
+{
+    [TestClass]
+    [PexClass(typeof(@ClassNameTest))]
+    [PexAllowedExceptionFromTypeUnderTest(typeof(ArgumentException), AcceptExceptionSubtypes = true)]
+    [PexAllowedExceptionFromTypeUnderTest(typeof(InvalidOperationException))]
+    public partial class @ClassNameTest
+    {
+        protected static IDisposable Context { get; set; }
+        protected static Dictionary<string, object> testStorage = new Dictionary<string, object>()
+        { };
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        { }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        { }
+
+        [TestInitialize()]
+        public void PreTest()
+        {
+            // Create ShimsContext
+            Context = ShimsContext.Create();
+            //TestLibrary.DNNFakes.Initialize();
+            //TestLibrary.SystemFakes.Initialize();
+            //TestLibrary.SharedLibraryFakes.Initialize();
+
+            CommonFakes.Initialize();
+        }
+
+        [TestCleanup()]
+        public void PostTest()
+        {
+            Context.Dispose();
+            Context = null;
+        }
+
+@sbTestClassFile_fromMethodReturn
+	}
+}

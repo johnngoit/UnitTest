@@ -1,0 +1,24 @@
+﻿using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.Pex.Framework.Generated;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedLibrary.Common;
+using SharedLibrary.Test;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace @NameSpace.Tests
+{
+    public partial class @ClassNameTest
+    {
+        [TestMethod]
+        [PexGeneratedBy(typeof(@ClassNameTest))]
+        public void @MethodNameConfirm()
+        {
+			@TargetDeclareInit
+			@MethodParamsDeclareInit
+			@MethodReturnResultthis.@MethodName(@TargetParamsCall@MethodParamsCall);
+            Assert.AreEqual((string)testStorage[""], "", "@ClassName @MethodName is not work property");
+        }
+    }
+}
