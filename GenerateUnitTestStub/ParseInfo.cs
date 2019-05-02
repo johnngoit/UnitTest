@@ -91,41 +91,33 @@ namespace GenerateUnitTestStub
 			Utils.WriteFile((string)infoAll["@TemplatePath"] + "output.txt", output.ToString(), true);
 		}
 
-		private void parseInfo(Dictionary<string, object> infoAll)
-		{
-			ClassInfo cInfo = new ClassInfo();
-			StringBuilder output = new StringBuilder();
-			StringBuilder projOutput = new StringBuilder();
-			FileInfo f = new FileInfo((string)infoAll["fileFullPath"]);
-			string className = infoAll["@ClassName"].ToString();
-			string projectName = infoAll["@ProjectName"].ToString();
-
-			int classNameIndex = f.FullName.IndexOf(projectName + "\\");
-			string ClassTestFile_UnitPath = "UnitTests\\" + f.FullName.Substring(classNameIndex);
-			infoAll["@ClassTestFile_UnitPath"] = ClassTestFile_UnitPath.Replace(f.Extension, "Test" + f.Extension);
-			f = new FileInfo((string)infoAll["@ClassTestFile_UnitPath"]);
-			newFiles["Project"] = (string)infoAll["@TestPath"] + (string)infoAll["@TestProjName"] + ".csproj";
-
-			string testRelPath = infoAll["@NameSpace"].ToString().Replace(infoAll["@ProjectName"].ToString() + ".", "").Replace(".", "\\").Trim();
-			string fileMiddlePart = (string)infoAll["@FileClassName"];
-			className = (string)infoAll["@ClassName"];
-			if (fileMiddlePart != className)
-			{
-				fileMiddlePart += "." + className;
-			}
-			fileMiddlePart += "Test.";
-			string testClassFileName = fileMiddlePart + "cs";
-			string testClassUnitPath = "UnitTests\\" + testRelPath + "\\" + testClassFileName;
-			newFiles["@Class:" + className] = (string)infoAll["@TestPath"] + testClassUnitPath;
-			infoAll["@ClassTestFile_UnitPath"] = testClassUnitPath;
-		}
-
-		//private void GenerateUnitFiles1(Dictionary<string, object> infoAll, List<ClassInfo> classes)
+		//private void parseInfo(Dictionary<string, object> infoAll)
 		//{
-		//	foreach (ClassInfo c in classes)
+		//	ClassInfo cInfo = new ClassInfo();
+		//	StringBuilder output = new StringBuilder();
+		//	StringBuilder projOutput = new StringBuilder();
+		//	FileInfo f = new FileInfo((string)infoAll["fileFullPath"]);
+		//	string className = infoAll["@ClassName"].ToString();
+		//	string projectName = infoAll["@ProjectName"].ToString();
+
+		//	int classNameIndex = f.FullName.IndexOf(projectName + "\\");
+		//	string ClassTestFile_UnitPath = "UnitTests\\" + f.FullName.Substring(classNameIndex);
+		//	infoAll["@ClassTestFile_UnitPath"] = ClassTestFile_UnitPath.Replace(f.Extension, "Test" + f.Extension);
+		//	f = new FileInfo((string)infoAll["@ClassTestFile_UnitPath"]);
+		//	newFiles["Project"] = (string)infoAll["@TestPath"] + (string)infoAll["@TestProjName"] + ".csproj";
+
+		//	string testRelPath = infoAll["@NameSpace"].ToString().Replace(infoAll["@ProjectName"].ToString() + ".", "").Replace(".", "\\").Trim();
+		//	string fileMiddlePart = (string)infoAll["@FileClassName"];
+		//	className = (string)infoAll["@ClassName"];
+		//	if (fileMiddlePart != className)
 		//	{
-		//		c.GenerateTestFile(infoAll);
+		//		fileMiddlePart += "." + className;
 		//	}
+		//	fileMiddlePart += "Test.";
+		//	string testClassFileName = fileMiddlePart + "cs";
+		//	string testClassUnitPath = "UnitTests\\" + testRelPath + "\\" + testClassFileName;
+		//	newFiles["@Class:" + className] = (string)infoAll["@TestPath"] + testClassUnitPath;
+		//	infoAll["@ClassTestFile_UnitPath"] = testClassUnitPath;
 		//}
 
 		private string getProPathByFullPath(string fileFullPath)
@@ -146,9 +138,6 @@ namespace GenerateUnitTestStub
 		{
 			return line.StartsWith("namespace ");
 		}
-
-		//public static string ProjectTemplate_ClassTestFile = "<Compile Include=\"@ClassTestFile_UnitPath\" />";
-		//public static string ProjectTemplate_MethodTestFile = "<Compile Include=\"@MethodTestFile_UnitPath\">\n\t<DependentUpon>@ClassTestFile_UnitPath</DependentUpon>\n</Compile>";
 
 		private void GenerateUnitFiles(Dictionary<string, object> infoAll, string[] methodList)
 		{
@@ -250,6 +239,78 @@ namespace GenerateUnitTestStub
 			Utils.WriteFile((string)infoAll["@TemplatePath"] + "output.txt", output.ToString());
 		}
 
+		public static string[] loadTemplate(string[] lines, string templatePath)
+		{  //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\
+		   //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\bin\Debug
+		   //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\templates
+			try
+			{
+				for (int i = 0; i < lines.Length; i++)
+				{
+					bool isTemplateLine = lines[i].Trim().StartsWith("@Template:");
+					if (isTemplateLine)
+					{
+						string templateFileFullPath = templatePath + lines[i].Trim().Replace("@Template:", "");
+						lines[i] = string.Join(Environment.NewLine, Utils.ReadFile(templateFileFullPath));
+					}
+				}
+			}
+			catch { }
+			return lines;
+		}
+
+		public static string getTemplatePath()
+		{
+			FileInfo f = new FileInfo("tmp.txt");
+			return f.DirectoryName.Replace("\\bin\\Debug", "\\templates") + "\\";
+		}
+
+		private bool isLineAClassDeclare(string line)
+		{
+			line = line.TrimStart().Replace("{", "").TrimEnd().Replace(" partial ", " ");
+			if (line.IndexOf(":") > 5)
+			{
+				line = line.Substring(0, line.IndexOf(":")).TrimEnd();
+			}
+			bool isAClass = line.Contains(" class ");
+			if (!isAClass)
+				return false;
+			var part = line.Split(' ');
+			if (part.Count() < 2)
+				return false;
+			bool isStartwithPublic = line.TrimStart().StartsWith("public ");
+			if (!isStartwithPublic)
+				return false;
+			bool isStaticClass = part[1].Trim().Contains("static");
+			bool isPartsCount = (isStaticClass && part.Length == 4) || (part.Length == 3);
+			return isStartwithPublic && isAClass && isPartsCount;
+		}
+		private bool isLineAMethodDeclare(string v, string methodName)
+		{
+			v = v.TrimStart().TrimEnd().Replace("( ", "(").Replace(" )", ")").Replace("{", "");
+			bool isContainMethodName = string.IsNullOrWhiteSpace(methodName) || v.Trim().Contains(methodName + "(");
+			if (!isContainMethodName)
+				return false;
+			bool isLineStartWithEncapsulate = v.Trim().StartsWith("public") || v.StartsWith("protected");
+			if (!isLineStartWithEncapsulate)
+				return false;
+			bool isLineFunctionIndicate = v.Contains("(") && v.Trim().EndsWith(")");
+			var nameParts = v.Split(' ');
+			//if (nameParts.Count() < 3)
+			//	return false;
+			return isContainMethodName && isLineStartWithEncapsulate && isLineFunctionIndicate;
+		}
+
+		//private void GenerateUnitFiles1(Dictionary<string, object> infoAll, List<ClassInfo> classes)
+		//{
+		//	foreach (ClassInfo c in classes)
+		//	{
+		//		c.GenerateTestFile(infoAll);
+		//	}
+		//}
+		//public static string ProjectTemplate_ClassTestFile = "<Compile Include=\"@ClassTestFile_UnitPath\" />";
+		//public static string ProjectTemplate_MethodTestFile = "<Compile Include=\"@MethodTestFile_UnitPath\">\n\t<DependentUpon>@ClassTestFile_UnitPath</DependentUpon>\n</Compile>";
+
 		//private string getMethodTemplateNew(Dictionary<string, object> infoAll, MethodInfo mi)
 		//{
 		//	string result = "";
@@ -296,32 +357,6 @@ namespace GenerateUnitTestStub
 		//	return result;
 		//}
 
-		public static string[] loadTemplate(string[] lines, string templatePath)
-		{  //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\
-		   //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\bin\Debug
-		   //C:\dev\github\GenerateUnitTestStub\GenerateUnitTestStub\templates
-			try
-			{
-				for (int i = 0; i < lines.Length; i++)
-				{
-					bool isTemplateLine = lines[i].Trim().StartsWith("@Template:");
-					if (isTemplateLine)
-					{
-						string templateFileFullPath = templatePath + lines[i].Trim().Replace("@Template:", "");
-						lines[i] = string.Join(Environment.NewLine, Utils.ReadFile(templateFileFullPath));
-					}
-				}
-			}
-			catch { }
-			return lines;
-		}
-
-		public static string getTemplatePath()
-		{
-			FileInfo f = new FileInfo("tmp.txt");
-			return f.DirectoryName.Replace("\\bin\\Debug", "\\templates") + "\\";
-		}
-
 		//private string getProjectAddMethodReferenceStr(Dictionary<string, object> infoAll, MethodInfo mi)
 		//{
 		//	string result = "";
@@ -348,41 +383,6 @@ namespace GenerateUnitTestStub
 		//	catch { }
 		//	return result;
 		//}
-
-		private bool isLineAClassDeclare(string line)
-		{
-			line = line.TrimStart().Replace("{", "").TrimEnd().Replace(" partial ", " ");
-			if (line.IndexOf(":") > 5) {
-				line = line.Substring(0, line.IndexOf(":")).TrimEnd();
-			}
-			bool isAClass = line.Contains(" class ");
-			if (!isAClass)
-				return false;
-			var part = line.Split(' ');
-			if (part.Count() < 2)
-				return false;
-			bool isStartwithPublic = line.TrimStart().StartsWith("public ");
-			if (!isStartwithPublic)
-				return false;
-			bool isStaticClass = part[1].Trim().Contains("static");						
-			bool isPartsCount = (isStaticClass && part.Length == 4) || (part.Length == 3);
-			return isStartwithPublic && isAClass && isPartsCount;
-		}
-		private bool isLineAMethodDeclare(string v, string methodName)
-		{
-			v = v.TrimStart().TrimEnd().Replace("( ", "(").Replace(" )", ")").Replace("{", "");
-			bool isContainMethodName = string.IsNullOrWhiteSpace(methodName) || v.Trim().Contains(methodName + "(");
-			if (!isContainMethodName)
-				return false;
-			bool isLineStartWithEncapsulate = v.Trim().StartsWith("public") || v.StartsWith("protected");
-			if (!isLineStartWithEncapsulate)
-				return false;
-			bool isLineFunctionIndicate = v.Contains("(") && v.Trim().EndsWith(")");
-			var nameParts = v.Split(' ');
-			//if (nameParts.Count() < 3)
-			//	return false;
-			return isContainMethodName && isLineStartWithEncapsulate && isLineFunctionIndicate;
-		}
 
 		//private MethodInfo parseMethodInfo(string v)
 		//{

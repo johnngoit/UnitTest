@@ -35,11 +35,20 @@ namespace GenerateUnitTestStub
 			//	infoAll["@ClassName"] = infoAll["@FileClassName"];
 			//if (string.IsNullOrWhiteSpace(fileFullPath))
 			//fileFullPath = projPath + infoAll["@NameSpace"].ToString().Replace(".", "\\") + "\\" + infoAll["@ClassName"] + ".cs";
-			infoAll["@ClassName"] = this.ClassFile.Name.Replace(".cs", "");
+			
+			string className = this.ClassFile.Name.Replace(".cs", "");
+			infoAll["@ClassName"] = className;
 			string fileFullPath= (string)infoAll["fileFullPath"];
+			FileInfo f = new FileInfo(fileFullPath);
 			infoAll["@NameSpace"] = Utils.ReadFile(fileFullPath).Where(j => ParseInfo.isNameSpaceLine(j)).FirstOrDefault().Trim().Replace("namespace ", "");
-			string testRelPath = infoAll["@NameSpace"].ToString().Replace(infoAll["@ProjectName"].ToString() + ".", "").Replace(".", "\\").Trim();
-			string testClassUnitPath = "UnitTests\\" + testRelPath + "\\" + ClassFile.Name.Replace(".cs", "Test.cs");
+			string projName = (string)infoAll["@ProjectName"];
+			int projNameIndex = fileFullPath.IndexOf(projName) + projName.Length + 1;
+			int classNameIndex = fileFullPath.IndexOf(f.Name);
+			string testRelPath = "";
+			if (classNameIndex > projNameIndex) {
+				testRelPath = fileFullPath.Substring(projNameIndex, classNameIndex - projNameIndex);
+			}
+			string testClassUnitPath = "UnitTests\\" + testRelPath + ClassFile.Name.Replace(".cs", "Test.cs");
 			infoAll["@ClassTestFile_UnitPath"] = testClassUnitPath;
 			ClassTestFile = new FileInfo(infoAll["@TestPath"].ToString() + testClassUnitPath);
 		}

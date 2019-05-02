@@ -153,7 +153,7 @@ namespace GenerateUnitTestStub
 
 			//1. generate test method files, return generated file
 			string nameSpace = infoAll["@NameSpace"].ToString().Replace(infoAll["@ProjectName"].ToString(), "").Trim().Replace(".", "\\");
-			FileInfo TestFile = new FileInfo(infoAll["@TestPath"].ToString() + "UnitTests"+ nameSpace + "\\" + MethodTestFile.Name); ;
+			FileInfo TestFile = new FileInfo(infoAll["@TestPath"].ToString() + infoAll["@MethodTestFile_UnitPath"].ToString());
 			StringBuilder sbMethodFile = new StringBuilder();
 			if (TestFile.Exists)
 			{
